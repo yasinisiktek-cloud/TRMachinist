@@ -1,10 +1,12 @@
 # TRMachinist
 
+[![Windows build and smoke tests](https://github.com/yasinisiktek-cloud/TRMachinist/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/yasinisiktek-cloud/TRMachinist/actions/workflows/build.yml)
+
 **Open-source CNC machine simulation and Triple-Dexel material-removal engine for G-code verification, machine kinematics, collision detection, and in-process workpiece (IPW) simulation.**
 
 TRMachinist is an experimental CNC simulation platform written in C#/.NET 8. Its core focuses on deterministic NC parsing, machine-coordinate resolution, tool/holder geometry, collision analysis, and a Triple-Dexel stock representation for material-removal simulation.
 
-> Status: **alpha / active development**. This project is not a substitute for machine-builder documentation, a certified postprocessor, controller simulation, or shop-floor prove-out procedures.
+> Status: **alpha / active development**. The current public source baseline is `0.1.0-alpha4-test9-gpu-r33`, validated on GitHub Actions with a clean Windows .NET 8 Release build and smoke-test run. This project is not a substitute for machine-builder documentation, a certified postprocessor, controller simulation, or shop-floor prove-out procedures.
 
 ## Highlights
 
