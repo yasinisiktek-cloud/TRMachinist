@@ -1,0 +1,44 @@
+name: Bootstrap R33 source import
+
+on:
+  push:
+    branches: [source-r33-import]
+
+permissions:
+  contents: write
+
+jobs:
+  import-source:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: source-r33-import
+          fetch-depth: 0
+
+      - name: Expand sanitized source archive
+        shell: pwsh
+        run: |
+          $archive = 'TRMachinist_R33_Source_Import.zip'
+          if (!(Test-Path $archive)) {
+            Write-Host 'Source archive is not present; nothing to import.'
+            exit 0
+          }
+          Expand-Archive -Path $archive -DestinationPath . -Force
+          Remove-Item $archive -Force
+
+      - name: Commit imported source
+        shell: pwsh
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if (git diff --cached --quiet) {
+            Write-Host 'No source changes to commit.'
+            exit 0
+          }
+          git commit -m 'Import sanitized R33 source'
+          git push origin HEAD:source-r33-import
