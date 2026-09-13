@@ -3,13 +3,14 @@ name: Bootstrap R33 source import
 on:
   push:
     branches: [source-r33-import]
+    paths:
+      - '.r33-import/READY'
 
 permissions:
   contents: write
 
 jobs:
   import-source:
-    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: windows-2022
     timeout-minutes: 10
     steps:
@@ -19,16 +20,17 @@ jobs:
           ref: source-r33-import
           fetch-depth: 0
 
-      - name: Expand sanitized source archive
+      - name: Reassemble and expand sanitized source archive
         shell: pwsh
         run: |
+          $parts = Get-ChildItem '.r33-import/part-*.b64' | Sort-Object Name
+          if ($parts.Count -eq 0) { throw 'No R33 import parts found.' }
+          $base64 = ($parts | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() }) -join ''
           $archive = 'TRMachinist_R33_Source_Import.zip'
-          if (!(Test-Path $archive)) {
-            Write-Host 'Source archive is not present; nothing to import.'
-            exit 0
-          }
+          [System.IO.File]::WriteAllBytes($archive, [System.Convert]::FromBase64String($base64))
           Expand-Archive -Path $archive -DestinationPath . -Force
           Remove-Item $archive -Force
+          Remove-Item '.r33-import' -Recurse -Force
 
       - name: Commit imported source
         shell: pwsh
@@ -36,9 +38,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          if (git diff --cached --quiet) {
-            Write-Host 'No source changes to commit.'
-            exit 0
-          }
           git commit -m 'Import sanitized R33 source'
           git push origin HEAD:source-r33-import
