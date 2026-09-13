@@ -1,0 +1,50 @@
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+artifacts/
+
+# IDE
+.vscode/
+.idea/
+
+# Build / publish
+publish/
+*.nupkg
+*.snupkg
+
+# Logs and temporary output
+*.log
+*.tmp
+*.bak
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local/private engineering data
+private/
+local-data/
+customer-data/
+production-data/
+Machines/
+Jobs/
+NC/
+source-provenance.json
+SOURCE_MANIFEST.json
+SOURCE_VALIDATION.json
+INCELEME_*/
+
+# CNC production files are ignored by default; curated synthetic examples under samples/ are tracked
+*.ptp
+*.prt
+*.step
+*.stp
+*.jt
+*.trmac
+*.trjob
