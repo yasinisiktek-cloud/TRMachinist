@@ -28,9 +28,16 @@ jobs:
           $base64 = ($parts | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() }) -join ''
           $archive = 'TRMachinist_R33_Source_Import.zip'
           [System.IO.File]::WriteAllBytes($archive, [System.Convert]::FromBase64String($base64))
+          $hash = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($hash -ne 'c5911270a72876c447533a48b7a231be562d7d366b1ebd499539a1d1d3c44d7f') { throw "Archive hash mismatch: $hash" }
           Expand-Archive -Path $archive -DestinationPath . -Force
+          if (!(Test-Path 'TRMachinist.sln')) { throw 'TRMachinist.sln was not extracted.' }
+          if (!(Test-Path 'src/TRMachinist.Core/TRMachinist.Core.csproj')) { throw 'Core project missing.' }
+          if (!(Test-Path 'src/TRMachinist.Simulator/TRMachinist.Simulator.csproj')) { throw 'Simulator project missing.' }
+          if (!(Test-Path 'src/TRMachinist.SmokeTests/TRMachinist.SmokeTests.csproj')) { throw 'SmokeTests project missing.' }
           Remove-Item $archive -Force
           Remove-Item '.r33-import' -Recurse -Force
+          Remove-Item '.github/workflows/bootstrap-r33-import.yml' -Force
 
       - name: Commit imported source
         shell: pwsh
