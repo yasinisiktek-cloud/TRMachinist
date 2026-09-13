@@ -1,0 +1,43 @@
+name: Windows build and smoke tests
+
+on:
+  push:
+    branches: [main, source-r33-clean]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-smoke:
+    name: Windows x64 / .NET 8 / Release
+    runs-on: windows-2022
+    timeout-minutes: 20
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore solution
+        run: dotnet restore TRMachinist.sln
+
+      - name: Build Release
+        run: dotnet build TRMachinist.sln --configuration Release --no-restore
+
+      - name: Run smoke-test executable
+        run: dotnet run --project src/TRMachinist.SmokeTests/TRMachinist.SmokeTests.csproj --configuration Release --no-build

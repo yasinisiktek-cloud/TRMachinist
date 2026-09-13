@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>0.1.0-alpha4-test9-gpu-r33</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Product>TRMachinist Machine G-Code Simulator</Product>
+    <Description>Runtime package, NX job package and NC simulation core.</Description>
+  </PropertyGroup>
+
+</Project>
+
+
