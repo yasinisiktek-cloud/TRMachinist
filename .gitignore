@@ -1,0 +1,60 @@
+# Build output
+bin/
+obj/
+artifacts/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet / .NET
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# IDE
+.idea/
+.vscode/
+_ReSharper*/
+*.DotSettings.user
+
+# Logs / diagnostics
+*.log
+*.dmp
+*.etl
+*.trace
+
+# Machine/job/production data: intentionally not versioned
+*.trmac
+*.trjob
+*.shopdocv
+*.prt
+*.stp
+*.step
+*.jt
+*.x_t
+*.x_b
+*.3mf
+
+# Large mesh / generated stock files
+*.stl
+*.obj
+*.ply
+
+# Local NC programs. Generic samples under samples/ are explicitly re-included.
+*.nc
+*.mpf
+*.spf
+*.tap
+!samples/**/*.nc
+!samples/**/*.mpf
+!samples/**/*.spf
+!samples/**/*.tap
+
+# Local environment
+.env
+.env.*
+secrets.*
