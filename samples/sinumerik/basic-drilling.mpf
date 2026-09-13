@@ -1,0 +1,13 @@
+; TRMachinist generic SINUMERIK-style sample - no production data
+G17 G90 G54
+T="DRILL_10" M6
+S2200 M3
+G0 X0 Y0 Z20
+MCALL CYCLE81(20,0,2,-12)
+X0 Y0
+X30 Y0
+X30 Y30
+X0 Y30
+MCALL
+G0 Z100
+M30
