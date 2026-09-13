@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TRMachinist.Core/TRMachinist.Core.csproj" />
+    <Project Path="src/TRMachinist.Simulator/TRMachinist.Simulator.csproj" />
+    <Project Path="src/TRMachinist.SmokeTests/TRMachinist.SmokeTests.csproj" />
+  </Folder>
+</Solution>

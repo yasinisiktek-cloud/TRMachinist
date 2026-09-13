@@ -1,0 +1,351 @@
+<ui:FluentWindow x:Class="TRMachinist.Simulator.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+ xmlns:helix="http://helix-toolkit.org/wpf" xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+ Title="TRMachinist Machine G-Code Simulator — R33"
+ Width="1600" Height="940" MinWidth="1180" MinHeight="700"
+ Background="{StaticResource WindowBackground}" Foreground="{StaticResource ForegroundPrimary}"
+ FontFamily="Segoe UI" FontSize="12" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display"
+ ExtendsContentIntoTitleBar="True" WindowBackdropType="None" WindowCornerPreference="Round"
+ WindowStartupLocation="CenterScreen" AllowDrop="True" Drop="Window_Drop" DragOver="Window_DragOver"
+ PreviewKeyDown="Window_PreviewKeyDown">
+ <Grid>
+  <Grid.RowDefinitions>
+   <RowDefinition Height="36" /><RowDefinition Height="0" /><RowDefinition Height="Auto" />
+   <RowDefinition Height="*" /><RowDefinition Height="100" /><RowDefinition Height="28" />
+  </Grid.RowDefinitions>
+  <ui:TitleBar Grid.Row="0" Title="TRMachinist" ShowClose="True" Background="#202124" Foreground="{StaticResource ForegroundPrimary}">
+   <ui:TitleBar.Icon><ui:SymbolIcon Symbol="Cube24" Foreground="{StaticResource Primary}" /></ui:TitleBar.Icon>
+  </ui:TitleBar>
+  <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+   <TextBlock Text="G-CODE SIMULATOR" Foreground="{StaticResource ForegroundMuted}" FontSize="10" VerticalAlignment="Center" />
+   <Border Margin="12,0,0,0" Padding="7,2" CornerRadius="4" Background="#343B49"><TextBlock Text="R33 · ALPHA" Foreground="{StaticResource Primary}" FontSize="10" FontWeight="SemiBold" /></Border>
+  </StackPanel>
+  <Border x:Name="BusyOverlay" Grid.Row="2" Visibility="Collapsed" Background="#343B49" Padding="18,8">
+   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+    <ProgressBar Width="90" Height="3" IsIndeterminate="True" VerticalAlignment="Center" /><TextBlock x:Name="BusyText" Grid.Column="1" Margin="14,0,0,0" Text="Yükleniyor…" Foreground="{StaticResource Primary}" />
+   </Grid>
+  </Border>
+  <Grid Grid.Row="3" x:Name="WorkspaceGrid">
+   <Grid.ColumnDefinitions><ColumnDefinition x:Name="SetupColumn" Width="266" MinWidth="244" /><ColumnDefinition x:Name="LeftSplitterColumn" Width="5" /><ColumnDefinition Width="*" /><ColumnDefinition x:Name="RightSplitterColumn" Width="5" /><ColumnDefinition x:Name="InspectorColumn" Width="360" MinWidth="330" /></Grid.ColumnDefinitions>
+   <Grid x:Name="SetupPane" Background="{StaticResource PanelBackground}">
+    <Grid.RowDefinitions><RowDefinition Height="48" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+    <Grid Margin="16,0,10,0"><TextBlock Style="{StaticResource SectionTitle}" Text="Sahne ve stok" VerticalAlignment="Center" /><Button HorizontalAlignment="Right" Tag="PanelLeft24" Click="ToggleSetup_Click" Style="{StaticResource IconButton}" ToolTip="Sol paneli kapat" AutomationProperties.Name="Sol paneli kapat" /></Grid>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="12,0,12,6">
+     <StackPanel>
+      <GroupBox Header="Dosyalar" Padding="8"><StackPanel>
+    <Button Click="OpenMachine_Click" Style="{StaticResource FileButton}" Margin="0,0,0,6" Padding="9,8" AutomationProperties.Name="Makine TRMAC aç" ToolTip="Tezgâh ve kinematik (.trmac)">
+     <Grid>
+      <Grid.ColumnDefinitions><ColumnDefinition Width="36" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+      <Border Width="28" Height="28" CornerRadius="6" Background="#3B4049" HorizontalAlignment="Left"><TextBlock Text="01" Foreground="{StaticResource Primary}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+      <StackPanel Grid.Column="1"><TextBlock Text="Makine" FontWeight="SemiBold" /><TextBlock x:Name="MachineFileText" Style="{StaticResource Caption}" Text=".trmac dosyası seç" TextTrimming="CharacterEllipsis" MaxHeight="16" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Margin="0,3,0,0" /></StackPanel>
+     </Grid>
+    </Button>
+    <Button Click="OpenJob_Click" Style="{StaticResource FileButton}" Margin="0,0,0,6" Padding="9,8" AutomationProperties.Name="NX sim paketi TRJOB aç" ToolTip="Parça, stok, fikstür, takımlar ve CSYS (.trjob)">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="36" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+      <Border Width="28" Height="28" CornerRadius="6" Background="#3B4049" HorizontalAlignment="Left"><TextBlock Text="02" Foreground="{StaticResource Primary}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+      <StackPanel Grid.Column="1"><TextBlock Text="İş paketi" FontWeight="SemiBold" /><TextBlock x:Name="JobFileText" Style="{StaticResource Caption}" Text=".trjob dosyası seç" TextTrimming="CharacterEllipsis" MaxHeight="16" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Margin="0,3,0,0" /></StackPanel>
+     </Grid>
+    </Button>
+    <Button Click="OpenNc_Click" Style="{StaticResource FileButton}" Margin="0,0,0,6" Padding="9,8" AutomationProperties.Name="NC programı aç" ToolTip="Post edilmiş NC programını aç">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="36" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+      <Border Width="28" Height="28" CornerRadius="6" Background="#3B4049" HorizontalAlignment="Left"><TextBlock Text="03" Foreground="{StaticResource Primary}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Consolas" /></Border>
+      <StackPanel Grid.Column="1"><TextBlock Text="NC programı" FontWeight="SemiBold" /><TextBlock x:Name="NcFileText" Style="{StaticResource Caption}" Text="G-code dosyası seç" TextTrimming="CharacterEllipsis" MaxHeight="16" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Margin="0,3,0,0" /></StackPanel>
+     </Grid>
+    </Button>
+      </StackPanel></GroupBox>
+      <GroupBox Header="Talaş kaldırma · IPW" Padding="12">
+       <StackPanel>
+        <Grid Margin="0,0,0,10"><TextBlock x:Name="IpwStateText" Text="IPW kapalı" Foreground="{StaticResource ForegroundMuted}" /><Border HorizontalAlignment="Right" CornerRadius="4" Background="#343B49" Padding="6,2"><TextBlock Text="0,15 mm" FontFamily="Consolas" FontSize="11" Foreground="{StaticResource Primary}" /></Border></Grid>
+        <Button Click="Alpha4IpwStart_Click" Style="{StaticResource PrimaryButton}" Tag="Box24" Margin="0,0,0,6" Content="IPW başlat" AutomationProperties.Name="NC IPW başlat" />
+        <TextBlock Text="Oynatma ve başa dönme alttaki çubukta." Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,2,0,8" />
+        <UniformGrid Columns="2"><Button x:Name="IpwVisibilityButton" Click="IpwVisibility_Click" IsEnabled="False" Content="Stoku gizle" Style="{StaticResource QuietButton}" Padding="5" /><Button Click="Alpha4IpwEnd_Click" Content="IPW kapat" Style="{StaticResource QuietButton}" Padding="5" Margin="0,0,0,5" /></UniformGrid>
+        <Grid Margin="0,8,0,0"><TextBlock Style="{StaticResource Caption}" Text="Stok opaklığı" /><TextBlock x:Name="StockOpacityText" HorizontalAlignment="Right" Text="92%" FontFamily="Consolas" /></Grid>
+        <Slider x:Name="StockOpacitySlider" Minimum="10" Maximum="100" Value="100" TickFrequency="10" IsSnapToTickEnabled="False" ValueChanged="StockOpacitySlider_ValueChanged" AutomationProperties.Name="Stok opaklığı" />
+        <Expander Header="Stok ayrıntıları" ToolTip="Stok ölçüleri, kaldırılan hacim ve yüzey performansı" Margin="0,6,0,0" Padding="6" FontSize="11">
+         <TextBlock x:Name="Alpha4IpwInfoText" FontFamily="Consolas" FontSize="11" Foreground="{StaticResource ForegroundMuted}" Text="Hazır — önce makine ve doğru .trjob paketini açın." TextWrapping="Wrap" />
+        </Expander>
+       </StackPanel>
+      </GroupBox>
+      <Expander Header="Görünürlük" IsExpanded="True">
+       <StackPanel>
+        <UniformGrid Columns="2">       <Button Click="FocusMachiningArea_Click" Content="İşleme alanı" Style="{StaticResource QuietButton}" Margin="0" Padding="9,7" ToolTip="İşleme alanına odaklan" />
+       <Button Click="FocusJob_Click" Content="Sadece iş" Style="{StaticResource QuietButton}" Margin="0" Padding="9,7" />
+</UniformGrid>
+        <UniformGrid Columns="2" Margin="0,0,0,8"><Button Click="HideCabin_Click" Content="Kabini gizle" Padding="6" /><Button Click="ShowAll_Click" Content="Tümünü göster" Padding="6" Margin="0,0,0,5" /></UniformGrid>
+        <Grid><TextBlock Text="Makine opaklığı" Style="{StaticResource Caption}" /><TextBlock x:Name="MachineOpacityText" Text="100%" HorizontalAlignment="Right" FontFamily="Consolas" /></Grid>
+        <Slider x:Name="MachineOpacitySlider" Minimum="8" Maximum="100" Value="100" TickFrequency="10" IsSnapToTickEnabled="False" ValueChanged="MachineOpacitySlider_ValueChanged" AutomationProperties.Name="Makine opaklığı" />
+        <ScrollViewer MaxHeight="210" VerticalScrollBarVisibility="Auto" Margin="0,8,0,0"><StackPanel x:Name="ComponentVisibilityPanel" /></ScrollViewer>
+       </StackPanel>
+      </Expander>
+      <Expander Header="Bağlama ve CSYS">
+       <StackPanel>
+        <TextBlock Style="{StaticResource Caption}" Text="Tezgâh hedefi" /><TextBlock x:Name="TableFrameText" Text="PART_MOUNT_JCT bekleniyor" TextWrapping="Wrap" Margin="0,3,0,10" />
+        <TextBlock Style="{StaticResource Caption}" Text="NX seçilen CSYS" /><TextBlock x:Name="MountFrameText" Text="machineMountCsys bekleniyor" TextWrapping="Wrap" Margin="0,3,0,10" />
+        <TextBlock Style="{StaticResource Caption}" Text="Merkez bindirme hatası" /><TextBlock x:Name="PlacementErrorText" Foreground="{StaticResource WarningBrush}" Text="—" Margin="0,3,0,10" />
+        <TextBlock Style="{StaticResource Caption}" Text="Konum düzeltmesi" /><TextBlock x:Name="CsysOffsetText" Text="X 0 · Y 0 · Z 0 mm" FontFamily="Consolas" Margin="0,3,0,10" />
+        <Button Click="WorkpieceOffset_Click" Content="Parça / CSYS konumu" Margin="0" />
+        <TextBlock x:Name="SeatWarningText" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,8,0,0" />
+       </StackPanel>
+      </Expander>
+      <Expander Header="Sahne bilgisi"><TextBlock x:Name="RuntimeText" Text="Makine: 0 mesh&#x0a;İş: 0 mesh&#x0a;Üçgen: 0" Foreground="{StaticResource ForegroundMuted}" TextWrapping="Wrap" /></Expander>
+     </StackPanel>
+    </ScrollViewer>
+   </Grid>
+   <GridSplitter x:Name="LeftSplitter" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{StaticResource WindowBackground}" />
+   <Grid Grid.Column="2" Background="#2A2C30">
+    <Grid.RowDefinitions><RowDefinition Height="48" /><RowDefinition Height="*" /><RowDefinition Height="50" /></Grid.RowDefinitions>
+    <Border Background="#303237" BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,0,0,1" Padding="8,0">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+      <Button x:Name="ShowSetupButton" Tag="PanelLeft24" Click="ToggleSetup_Click" Style="{StaticResource IconButton}" ToolTip="Sahne ve stok paneli" AutomationProperties.Name="Sahne ve stok paneli" Visibility="Collapsed" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+       <CheckBox x:Name="ToolPathVisibleCheckBox" Content="Takım yolu" Margin="6,0,12,0" IsEnabled="False" Checked="ToolPathMode_Changed" Unchecked="ToolPathMode_Changed" ToolTip="Planlanmış takım yolunu göster / gizle" />
+       <CheckBox x:Name="ProgressiveToolPathCheckBox" Content="İlerledikçe çiz" IsEnabled="False" Checked="ToolPathMode_Changed" Unchecked="ToolPathMode_Changed" ToolTip="İşaretliyken yalnız oynatılan bölüm çizilir. Kapalıyken yolun tamamı görünür." />
+      </StackPanel>
+      <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+       <Button Tag="FullScreenMaximize24" Click="FocusWorkspace_Click" Style="{StaticResource IconButton}" ToolTip="Panelleri kapat / geri getir" AutomationProperties.Name="Çalışma alanını genişlet" />
+       <Button x:Name="ShowInspectorButton" Tag="PanelRight24" Click="ToggleInspector_Click" Style="{StaticResource IconButton}" ToolTip="Program ve denetim paneli" AutomationProperties.Name="Program ve denetim paneli" Visibility="Collapsed" />
+      </StackPanel>
+     </Grid>
+    </Border>
+    <Grid Grid.Row="1">
+     <helix:HelixViewport3D x:Name="Viewport" Visibility="Collapsed" ShowCoordinateSystem="False" ShowViewCube="False" ZoomExtentsWhenLoaded="False">
+                    <helix:HelixViewport3D.Camera>
+                        <OrthographicCamera Position="850,-1100,760" LookDirection="-850,1100,-560" UpDirection="0,0,1" Width="2200" />
+                    </helix:HelixViewport3D.Camera>
+                    <helix:HelixViewport3D.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="#FFFFFF" />
+                            <GradientStop Offset="0.65" Color="#F5F6F7" />
+                            <GradientStop Offset="1" Color="#E8EBED" />
+                        </LinearGradientBrush>
+                    </helix:HelixViewport3D.Background>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <AmbientLight Color="#85898B" />
+                                <DirectionalLight Color="#FFFFFF" Direction="-0.45,-0.62,-1" />
+                                <DirectionalLight Color="#CCD8DE" Direction="0.82,0.28,-0.5" />
+                                <DirectionalLight Color="#A9B1B5" Direction="-0.15,1,0.2" />
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </helix:HelixViewport3D>
+                <hx:Viewport3DX x:Name="GpuViewport"
+                               BackgroundColor="#E4E5E7" Visibility="{Binding SceneVisibility, RelativeSource={RelativeSource AncestorType=Window}}"
+                               EnableSwapChainRendering="True"
+                               MSAA="Four"
+                               OITRenderMode="DepthPeeling"
+                               EnableSSAO="True"
+                               SSAOQuality="Low"
+                               SSAOIntensity="0.62"
+                               SSAOSamplingRadius="0.30"
+                               ShowFrameRate="False"
+                               ShowTriangleCountInfo="False"
+                               ShowViewCube="True"
+                               ShowCoordinateSystem="True"
+                               IsInertiaEnabled="False">
+                    <hx:AmbientLight3D Color="#555D62" />
+                    <hx:DirectionalLight3D Color="#FFF7E8" Direction="-0.45,-0.62,-1" />
+                    <hx:DirectionalLight3D Color="#B7CAD7" Direction="0.82,0.28,-0.5" />
+                    <hx:DirectionalLight3D Color="#87949D" Direction="-0.15,1,0.2" />
+                    <hx:GroupModel3D x:Name="GpuSceneRoot" />
+                </hx:Viewport3DX>
+     <Grid x:Name="WelcomePanel" Visibility="{Binding WelcomeVisibility, RelativeSource={RelativeSource AncestorType=Window}}">
+      <Grid.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#35373D" Offset="0" /><GradientStop Color="#25272B" Offset="1" /></LinearGradientBrush></Grid.Background>
+      <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+      <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="24,14,24,8"><StackPanel Width="460" HorizontalAlignment="Center" VerticalAlignment="Center">
+       <Viewbox Width="140" Height="126" Margin="0,0,0,26"><Canvas Width="140" Height="126">
+        <Path Data="M 70,8 L 124,38 L 70,69 L 16,38 Z" Fill="#3E4E64" Stroke="#8AB4F8" StrokeThickness="1.5" />
+        <Path Data="M 16,38 L 70,69 L 70,118 L 16,87 Z" Fill="#303740" Stroke="#8190A5" StrokeThickness="1.5" />
+        <Path Data="M 70,69 L 124,38 L 124,87 L 70,118 Z" Fill="#374456" Stroke="#8AB4F8" StrokeThickness="1.5" />
+        <Path Data="M 70,8 L 70,69 M 16,38 L 124,87 M 124,38 L 16,87" Stroke="#7E8DA3" StrokeThickness="0.8" StrokeDashArray="3 5" />
+       </Canvas></Viewbox>
+       <TextBlock Text="Bir sonraki kesime hazır." FontSize="27" FontWeight="SemiBold" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" />
+       <TextBlock Text="Makine, iş paketi ve NC programını aç.&#x0a;Tüm işleme sürecini tek bir sahnede izle." Foreground="#B3C5CE" FontSize="14" LineHeight="23" TextAlignment="Center" TextWrapping="Wrap" Margin="0,14,0,22" />
+       <Button Click="OpenMachine_Click" Tag="FolderOpen24" Content="Makine dosyası aç" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Center" Padding="22,12" Margin="0" />
+       <TextBlock Text=".trmac  /  .trjob  /  NC dosyalarını sürükleyebilirsin" Style="{StaticResource Caption}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,18,0,0" />
+      </StackPanel></Viewbox>
+      <TextBlock Grid.Row="1" Text="ORTOGRAFİK GÖRÜNÜM   ·   NX KAMERA KONTROLLERİ" Foreground="#B4B7BF" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="12,16" />
+     </Grid>
+    </Grid>
+    <Border Grid.Row="2" Background="#303237" BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,1,0,0" Padding="12,7">
+     <UniformGrid Columns="6"><StackPanel Margin="4,0"><TextBlock Text="X" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisXText" Text="0.000 mm" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel><StackPanel Margin="4,0"><TextBlock Text="Y" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisYText" Text="0.000 mm" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel><StackPanel Margin="4,0"><TextBlock Text="Z" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisZText" Text="0.000 mm" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel><StackPanel Margin="4,0"><TextBlock Text="A" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisAText" Text="0.000°" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel><StackPanel Margin="4,0"><TextBlock Text="B" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisBText" Text="0.000°" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel><StackPanel Margin="4,0"><TextBlock Text="C" FontSize="10" Foreground="{StaticResource ForegroundMuted}" /><TextBlock x:Name="AxisCText" Text="0.000°" FontFamily="Consolas" FontSize="12" Margin="0,3,0,0" /></StackPanel></UniformGrid>
+    </Border>
+   </Grid>
+   <GridSplitter x:Name="RightSplitter" Grid.Column="3" Width="5" HorizontalAlignment="Stretch" Background="{StaticResource WindowBackground}" />
+   <Grid x:Name="InspectorPane" Grid.Column="4" Background="{StaticResource PanelBackground}">
+    <Grid.RowDefinitions><RowDefinition Height="48" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+    <Grid Margin="14,0,8,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+     <StackPanel VerticalAlignment="Center"><TextBlock Style="{StaticResource SectionTitle}" Text="Program ve denetim" /><TextBlock x:Name="ProgramSummaryText" MouseLeftButtonUp="ShowNcDiagnostics_Click" Cursor="Hand" Text="NC programı bekleniyor" Style="{StaticResource Caption}" FontSize="10" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" /></StackPanel>
+     <Button Grid.Column="1" Tag="PanelRight24" Click="ToggleInspector_Click" Style="{StaticResource IconButton}" ToolTip="Sağ paneli kapat" AutomationProperties.Name="Sağ paneli kapat" />
+    </Grid>
+    <TabControl x:Name="ExecutionTabs" Grid.Row="1" Background="{StaticResource PanelBackground}" BorderThickness="0">
+                    <TabItem Header="NC">
+                        <DataGrid x:Name="GCodeGrid" FontFamily="Consolas" FontSize="12" CanUserSortColumns="False" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                                  SelectionChanged="GCodeGrid_SelectionChanged" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Satır" Binding="{Binding SourceLine}" Width="76" />
+                                <DataGridTextColumn Header="G-code / kaynak satır" Binding="{Binding Raw}" Width="820" />
+                                <DataGridTextColumn Header="Uyarı" Binding="{Binding Warning}" Width="90" />
+                                <DataGridTextColumn Header="Hata" Binding="{Binding Error}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem Header="İşlemler">
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="8,7,8,5">
+                                <TextBlock FontWeight="SemiBold" Text="Operasyonlar" />
+                                <TextBlock x:Name="OperationSummaryText" Margin="0,3,0,0" Foreground="#93A7B6" Text="Önce NC programını açın." TextWrapping="Wrap" />
+                            </StackPanel>
+                            <DataGrid x:Name="OperationGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                                      SelectionMode="Extended" SelectionUnit="FullRow"
+                                      SelectionChanged="OperationGrid_SelectionChanged" MouseDoubleClick="OperationGrid_MouseDoubleClick"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding Number}" Width="48" />
+                                    <DataGridTextColumn Header="Operasyon" Binding="{Binding Name}" Width="170" />
+                                    <DataGridTextColumn Header="Tip" Binding="{Binding Type}" Width="150" />
+                                    <DataGridTextColumn Header="Takım" Binding="{Binding ToolId}" Width="65" />
+                                    <DataGridTextColumn Header="NC satırı" Binding="{Binding StartSourceLine}" Width="75" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="2" Margin="6">
+                                <CheckBox x:Name="FollowActiveOperationCheckBox" IsChecked="True" Foreground="#DDE8EE"
+                                          Content="Aktif operasyonu takip et" />
+                                <CheckBox x:Name="ShowOperationLinksCheckBox" Margin="0,4,0,0" IsChecked="True" Foreground="#DDE8EE"
+                                          Checked="ShowOperationLinksCheckBox_Changed" Unchecked="ShowOperationLinksCheckBox_Changed"
+                                          Content="G0 yaklaşma ve bağlantılarını göster" />
+                                <WrapPanel Margin="0,5,0,0">
+                                    <Button Click="OperationShowPath_Click" Style="{StaticResource PrimaryButton}">Yolu göster</Button>
+                                    <Button Click="OperationGoTo_Click">Operasyona git</Button>
+                                    <Button Click="OperationHidePath_Click">Yolu gizle</Button>
+                                </WrapPanel>
+                                <TextBlock x:Name="OperationPathStatusText" Margin="3,4,3,0" Foreground="#93A7B6" Text="Operasyon yolu kapalı." TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Takımlar">
+                        <DataGrid x:Name="ToolGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="No" Binding="{Binding Id}" Width="55" />
+                                <DataGridTextColumn Header="Takım adı" Binding="{Binding Name}" Width="180" />
+                                <DataGridTextColumn Header="Tip" Binding="{Binding Type}" Width="100" />
+                                <DataGridTextColumn Header="Çap" Binding="{Binding Diameter, StringFormat={}{0:0.###} mm}" Width="80" />
+                                <DataGridTextColumn Header="Boy" Binding="{Binding Length, StringFormat={}{0:0.###} mm}" Width="80" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem Header="Durum">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="12">
+                                <TextBlock FontSize="15" FontWeight="SemiBold" Text="Simülasyon durumu" />
+                                <TextBlock x:Name="ExecutionStatusText" Margin="0,9,0,0" Foreground="#D1D4DB" Text="Makine, iş ve NC bekleniyor." TextWrapping="Wrap" />
+                                <TextBlock Text="NC uyarıları ve hataları" Style="{StaticResource SectionTitle}" Margin="0,20,0,8" />
+                                <TextBlock x:Name="NcDiagnosticsEmptyText" Text="NC programı yüklendiğinde açıklamalar burada görünür." Style="{StaticResource Caption}" TextWrapping="Wrap" />
+                                <ItemsControl x:Name="NcDiagnosticsList">
+                                 <ItemsControl.ItemTemplate><DataTemplate>
+                                  <Border BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,0,0,1" Padding="0,8,0,12" Margin="0,0,0,6">
+                                   <StackPanel>
+                                    <TextBlock Text="{Binding Heading}" FontWeight="SemiBold" Foreground="{StaticResource WarningBrush}" />
+                                    <TextBlock Text="{Binding Message}" Foreground="{StaticResource ForegroundPrimary}" TextWrapping="Wrap" Margin="0,5,0,6" />
+                                    <TextBlock Text="{Binding Raw}" FontFamily="Consolas" FontSize="11" TextWrapping="Wrap" Foreground="{StaticResource ForegroundMuted}" />
+                                    <Button Content="NC satırını göster" HorizontalAlignment="Left" Click="NcDiagnostic_Click" Margin="0,8,0,0" />
+                                   </StackPanel>
+                                  </Border>
+                                 </DataTemplate></ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="Çarpışma">
+                    <ScrollViewer x:Name="CollisionPanelScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <Grid Margin="12" MinHeight="420">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <TextBlock FontSize="14" FontWeight="SemiBold" Text="Çarpışma kontrolü" />
+                                <CheckBox x:Name="CollisionEnabledCheckBox" Margin="0,8,0,0" IsChecked="True"
+                                          Checked="CollisionEnabledCheckBox_Changed" Unchecked="CollisionEnabledCheckBox_Changed"
+                                          Foreground="#DDE8EE" Content="Kontrolü etkinleştir" />
+                                <CheckBox x:Name="CollisionStopCheckBox" Margin="0,4,0,0" IsChecked="True"
+                                          Foreground="#DDE8EE" Content="Yalnız gerçek çarpışmada durdur" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,10,0,7">
+                                <Grid><TextBlock Text="Güvenlik payı" /><TextBlock x:Name="CollisionClearanceText" HorizontalAlignment="Right" Foreground="{StaticResource WarningBrush}" Text="0,25 mm" /></Grid>
+                                <Slider x:Name="CollisionClearanceSlider" Margin="0,4,0,0" Minimum="0" Maximum="2" Value="0.25"
+                                        TickFrequency="0.05" IsSnapToTickEnabled="False"
+                                        ValueChanged="CollisionClearanceSlider_ValueChanged" />
+                                <TextBlock Margin="0,3,0,0" Foreground="#93A7B6" FontSize="11" TextWrapping="Wrap"
+                                           Text="0 mm yalnız gerçek teması; daha yüksek değer çarpışmadan önceki tehlikeli yaklaşmayı da yakalar." />
+                            </StackPanel>
+                            <DataGrid x:Name="CollisionHistoryGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tür" Binding="{Binding Type}" Width="78" />
+                                    <DataGridTextColumn Header="NC" Binding="{Binding SourceLine}" Width="72" />
+                                    <DataGridTextColumn Header="Birinci gövde" Binding="{Binding First}" Width="150" />
+                                    <DataGridTextColumn Header="İkinci gövde" Binding="{Binding Second}" Width="150" />
+                                    <DataGridTextColumn Header="Pay" Binding="{Binding Clearance}" Width="70" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Grid.Row="3" Margin="0,7,0,0">
+                                <WrapPanel>
+                                    <Button Click="CollisionCheckNow_Click" Style="{StaticResource PrimaryButton}">Şimdi kontrol et</Button>
+                                    <Button Click="CollisionClearHistory_Click">Kaydı temizle</Button>
+                                </WrapPanel>
+                                <TextBlock x:Name="CollisionStatusText" Margin="2,5,2,0" Foreground="#93A7B6"
+                                           Text="Makine, iş ve NC bekleniyor." TextWrapping="Wrap" />
+                                <TextBlock x:Name="CollisionDiagnosticsText" Margin="2,3,2,0" Foreground="{StaticResource ForegroundMuted}" FontSize="11"
+                                           Text="—" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+    <Border Grid.Row="2" BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,1,0,0" Padding="10,8,5,3">
+     <UniformGrid Columns="2"><Button x:Name="ToolPathButton" Click="OperationsPanel_Click" IsEnabled="False" Content="Operasyonlar" Tag="Layer24" /><Button Click="ToolHolderLibrary_Click" Content="Takım / tutucu" Tag="Wrench24" /></UniformGrid>
+    </Border>
+   </Grid>
+  </Grid>
+  <Border Grid.Row="4" Background="#2B2D31" BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,1,0,0" Padding="18,10,18,8">
+   <Grid><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="22" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+     <TextBlock x:Name="CurrentBlockText" Text="Blok —" Style="{StaticResource Caption}" />
+     <TextBlock x:Name="CurrentToolText" Grid.Column="1" Text="Takım —" Foreground="{StaticResource Primary}" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+    </Grid>
+    <Slider x:Name="TimelineSlider" Grid.Row="1" Minimum="0" Maximum="1" Value="0" Margin="0" MinHeight="18" PreviewMouseLeftButtonUp="TimelineSlider_MouseUp" AutomationProperties.Name="NC zaman çizelgesi" />
+    <Grid Grid.Row="2"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+      <Button Click="Reset_Click" Content="Başa dön" Tag="ArrowCounterclockwise24" Style="{StaticResource QuietButton}" Margin="0,0,6,0" ToolTip="NC programını sıfırla" />
+      <Button x:Name="PlayButton" Click="PlayPause_Click" Content="Oynat" Tag="Play24" Style="{StaticResource PrimaryButton}" Width="124" Margin="0,0,6,0" />
+      <Button Click="Step_Click" Content="Adım" Tag="ArrowStepIn24" Style="{StaticResource QuietButton}" Margin="0" ToolTip="Bir NC bloğu ilerle" />
+     </StackPanel>
+     <TextBlock Grid.Column="1" Text="Orta tuş: döndür   ·   Orta + sağ: kaydır   ·   F8: görünüm" Style="{StaticResource Caption}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="18,0" />
+     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+      <TextBlock Text="Oynatma hızı" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="0,0,12,0" />
+      <Slider x:Name="SpeedSlider" Width="125" Minimum="0.1" Maximum="100" Value="1" ValueChanged="SpeedSlider_ValueChanged" AutomationProperties.Name="Oynatma hızı" />
+      <TextBlock x:Name="SpeedText" Width="110" Text="1,0×" FontFamily="Consolas" Foreground="{StaticResource Primary}" VerticalAlignment="Center" TextAlignment="Right" />
+     </StackPanel>
+    </Grid>
+   </Grid>
+  </Border>
+  <Border Grid.Row="5" Background="#202124" Padding="18,5">
+   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+    <TextBlock x:Name="StatusText" Text="Hazır — makine, iş paketi ve NC programını açın." FontSize="11" Foreground="{StaticResource ForegroundMuted}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+    <TextBlock Grid.Column="1" Text="TRMachinist  /  R33" FontSize="10" Foreground="{StaticResource ForegroundMuted}" Margin="18,0,0,0" />
+   </Grid>
+  </Border>
+ </Grid>
+</ui:FluentWindow>
+
+
+

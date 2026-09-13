@@ -1,0 +1,166 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <!-- Opaque surfaces keep the DirectX workspace free of backdrop composition. -->
+    <SolidColorBrush x:Key="WindowBackground" Color="#202124" />
+    <SolidColorBrush x:Key="PanelBackground" Color="#292B2F" />
+    <SolidColorBrush x:Key="PanelRaised" Color="#34363B" />
+    <SolidColorBrush x:Key="PanelBorder" Color="#484B51" />
+    <SolidColorBrush x:Key="Primary" Color="#8AB4F8" />
+    <SolidColorBrush x:Key="ForegroundPrimary" Color="#F0F1F3" />
+    <SolidColorBrush x:Key="ForegroundMuted" Color="#B4B7BF" />
+    <SolidColorBrush x:Key="WarningBrush" Color="#F5C779" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#FF8F91" />
+    <SolidColorBrush x:Key="SystemAccentColorPrimaryBrush" Color="#8AB4F8" />
+    <SolidColorBrush x:Key="SystemAccentColorSecondaryBrush" Color="#A3C5FA" />
+    <SolidColorBrush x:Key="SystemAccentColorTertiaryBrush" Color="#BBD5FC" />
+    <Style x:Key="KeyboardFocus" TargetType="Control">
+        <Setter Property="Template"><Setter.Value><ControlTemplate>
+            <Border BorderBrush="{StaticResource Primary}" BorderThickness="2" CornerRadius="6" Margin="-2" />
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" />
+        <Setter Property="FontFamily" Value="Segoe UI" /><Setter Property="FontSize" Value="12" />
+        <Setter Property="UseLayoutRounding" Value="True" /><Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+    </Style>
+    <Style x:Key="Caption" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundMuted}" /><Setter Property="FontSize" Value="11" />
+    </Style>
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" /><Setter Property="FontSize" Value="13" /><Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PanelRaised}" /><Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}" /><Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="12" /><Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="MinHeight" Value="34" /><Setter Property="Padding" Value="11,7" /><Setter Property="Margin" Value="0,0,5,5" />
+        <Setter Property="Cursor" Value="Hand" /><Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" /><Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+            <Grid>
+                <Border x:Name="Chrome" CornerRadius="6" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <StackPanel Orientation="Horizontal" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center">
+                        <ui:SymbolIcon x:Name="Glyph" Symbol="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=Empty}" FontSize="17" Margin="0,0,7,0" Foreground="{TemplateBinding Foreground}" />
+                        <ContentPresenter RecognizesAccessKey="True" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                <Border x:Name="Hover" CornerRadius="6" Background="White" Opacity="0" IsHitTestVisible="False" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Tag" Value="{x:Null}"><Setter TargetName="Glyph" Property="Visibility" Value="Collapsed" /></Trigger>
+                <Trigger Property="Content" Value="{x:Null}"><Setter TargetName="Glyph" Property="Margin" Value="0" /></Trigger>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Hover" Property="Opacity" Value="0.07" /></Trigger>
+                <Trigger Property="IsPressed" Value="True"><Setter TargetName="Hover" Property="Opacity" Value="0.13" /></Trigger>
+                <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Chrome" Property="Opacity" Value="0.42" /></Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource Primary}" /></Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{StaticResource Primary}" /><Setter Property="Foreground" Value="#18273E" /><Setter Property="BorderBrush" Value="{StaticResource Primary}" />
+    </Style>
+    <Style x:Key="QuietButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="Transparent" /><Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource QuietButton}">
+        <Setter Property="Width" Value="34" /><Setter Property="Height" Value="34" /><Setter Property="Padding" Value="7" /><Setter Property="Margin" Value="2,0" />
+    </Style>
+    <Style x:Key="FileButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" /><Setter Property="Padding" Value="14,10" /><Setter Property="Margin" Value="0" /><Setter Property="Background" Value="{StaticResource PanelBackground}" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+            <Border x:Name="FileChrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="FileChrome" Property="Background" Value="#22343F" /><Setter TargetName="FileChrome" Property="BorderBrush" Value="#5B938F" /></Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="FileChrome" Property="BorderBrush" Value="{StaticResource Primary}" /></Trigger>
+                <Trigger Property="IsPressed" Value="True"><Setter TargetName="FileChrome" Property="Background" Value="#2C444E" /></Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="GroupBox">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" /><Setter Property="Background" Value="{StaticResource PanelBackground}" /><Setter Property="BorderBrush" Value="{StaticResource PanelBorder}" />
+        <Setter Property="Padding" Value="14" /><Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="GroupBox">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="8">
+                <DockPanel Margin="{TemplateBinding Padding}">
+                    <ContentPresenter DockPanel.Dock="Top" ContentSource="Header" Margin="0,0,0,12" TextElement.FontWeight="SemiBold" TextElement.FontSize="13" />
+                    <ContentPresenter />
+                </DockPanel>
+            </Border>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="TabControl">
+        <Setter Property="Background" Value="{StaticResource PanelBackground}" /><Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabControl">
+            <Grid KeyboardNavigation.TabNavigation="Local">
+                <Grid.RowDefinitions><RowDefinition Height="42" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                <UniformGrid Rows="1" IsItemsHost="True" KeyboardNavigation.TabIndex="1" />
+                <Border Grid.Row="1" Background="{TemplateBinding Background}" BorderBrush="{StaticResource PanelBorder}" BorderThickness="0,1,0,0">
+                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                </Border>
+            </Grid>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="TabItem">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundMuted}" /><Setter Property="FontSize" Value="12" /><Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem">
+            <Border x:Name="Tab" Background="Transparent" Padding="4,0" BorderThickness="0,0,0,2" BorderBrush="Transparent">
+                <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True"><Setter Property="Foreground" Value="{StaticResource Primary}" /><Setter TargetName="Tab" Property="BorderBrush" Value="{StaticResource Primary}" /><Setter TargetName="Tab" Property="Background" Value="#343B49" /></Trigger>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Tab" Property="Background" Value="#3B3E44" /></Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" /><Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" />
+        <Setter Property="RowBackground" Value="{StaticResource WindowBackground}" /><Setter Property="AlternatingRowBackground" Value="#141F27" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#24343E" /><Setter Property="VerticalGridLinesBrush" Value="#24343E" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal" /><Setter Property="BorderThickness" Value="0" /><Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="RowHeight" Value="30" /><Setter Property="ColumnHeaderHeight" Value="34" />
+        <Setter Property="CanUserAddRows" Value="False" /><Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="EnableRowVirtualization" Value="True" /><Setter Property="EnableColumnVirtualization" Value="True" />
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" /><Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" /><Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+    </Style>
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#34363B" /><Setter Property="Foreground" Value="{StaticResource ForegroundMuted}" /><Setter Property="BorderBrush" Value="{StaticResource PanelBorder}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" /><Setter Property="Padding" Value="10,7" /><Setter Property="FontSize" Value="11" /><Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="0" /><Setter Property="Padding" Value="10,4" /><Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="DataGridCell">
+            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"><ContentPresenter VerticalAlignment="Center" /></Border>
+        </ControlTemplate></Setter.Value></Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#354968" /><Setter Property="Foreground" Value="#F2F4F8" /></Trigger>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{StaticResource Primary}" /><Setter Property="BorderThickness" Value="1" /></Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="Slider">
+        <Setter Property="Margin" Value="0,4" /><Setter Property="MinHeight" Value="24" /><Setter Property="Foreground" Value="{StaticResource Primary}" /><Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}" />
+        <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Slider">
+            <Grid x:Name="SliderRoot" Background="Transparent" VerticalAlignment="Center">
+                <Track x:Name="PART_Track" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                    <Track.DecreaseRepeatButton><RepeatButton Command="Slider.DecreaseLarge" Focusable="False" Style="{x:Null}" OverridesDefaultStyle="True"><RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Grid Background="Transparent" Height="18"><Border Height="3" VerticalAlignment="Center" CornerRadius="1.5" Background="{StaticResource Primary}" /></Grid></ControlTemplate></RepeatButton.Template></RepeatButton></Track.DecreaseRepeatButton>
+                    <Track.Thumb><Thumb Width="18" Height="18"><Thumb.Template><ControlTemplate><Grid><Ellipse Fill="#2B2D31" Stroke="#66818B" StrokeThickness="1" /><Ellipse Width="10" Height="10" Fill="{StaticResource Primary}" /></Grid></ControlTemplate></Thumb.Template></Thumb></Track.Thumb>
+                    <Track.IncreaseRepeatButton><RepeatButton Command="Slider.IncreaseLarge" Focusable="False" Style="{x:Null}" OverridesDefaultStyle="True"><RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Grid Background="Transparent" Height="18"><Border Height="3" VerticalAlignment="Center" CornerRadius="1.5" Background="#526772" /></Grid></ControlTemplate></RepeatButton.Template></RepeatButton></Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+            <ControlTemplate.Triggers><Trigger Property="IsEnabled" Value="False"><Setter TargetName="SliderRoot" Property="Opacity" Value="0.45" /></Trigger></ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" /><Setter Property="MinHeight" Value="28" /><Setter Property="FontSize" Value="12" /><Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}" />
+    </Style>
+    <Style TargetType="Expander" BasedOn="{StaticResource {x:Type Expander}}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" /><Setter Property="Background" Value="{StaticResource PanelBackground}" /><Setter Property="BorderBrush" Value="{StaticResource PanelBorder}" /><Setter Property="Margin" Value="0,0,0,10" /><Setter Property="Padding" Value="12" />
+    </Style>
+    <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+        <Setter Property="MaxWidth" Value="520" /><Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}" />
+    </Style>
+</ResourceDictionary>
+

@@ -1,0 +1,371 @@
+{
+  "version": "0.1.0-alpha4-test9-gpu-r33",
+  "encoding": "UTF-8, LF, no BOM",
+  "files": [
+    {
+      "path": "TRMachinist.sln",
+      "bytes": 4439,
+      "sha256": "9074ba206eb4a94616e7dbc15dd9a8687ff9130a81e3a6f998a505697955b2f1"
+    },
+    {
+      "path": "TRMachinist.slnx",
+      "bytes": 285,
+      "sha256": "fd4d1ccf8080ad8ba331a875c942bce298559e30aaa24b8545a3163b74eac9c3"
+    },
+    {
+      "path": "VERSION",
+      "bytes": 28,
+      "sha256": "4f74f385f68b9dd6455e125e33cb50b8eaf3594589fc05256e14b84b0bcd89ea"
+    },
+    {
+      "path": "src/TRMachinist.Core/AdaptivePlaybackGovernor.cs",
+      "bytes": 5423,
+      "sha256": "48907f31426d9c28c13adc536ac7176fde2219d9ca86e7409a857ec11a75b870"
+    },
+    {
+      "path": "src/TRMachinist.Core/CollisionAlertPolicy.cs",
+      "bytes": 302,
+      "sha256": "084d3e1068ca3c2aa234c931a998e81a933dc1603c836ce27c8563c8db0a1290"
+    },
+    {
+      "path": "src/TRMachinist.Core/CoordinateTransforms.cs",
+      "bytes": 1583,
+      "sha256": "97d3dd3d9861855f850e29e104edeb7de73bf3bfe354c298e3258ab0aee1d062"
+    },
+    {
+      "path": "src/TRMachinist.Core/CycleStockProgress.cs",
+      "bytes": 1513,
+      "sha256": "ddbe37d3e77153dac745e15097bed89985e3d99d5dbbbbf90407a4aa827f3b1e"
+    },
+    {
+      "path": "src/TRMachinist.Core/DeterministicStockMotion.cs",
+      "bytes": 3686,
+      "sha256": "8eb14ac766fdc7ecdd315bf9d814b5d282d15efd776423d5e770570478431aef"
+    },
+    {
+      "path": "src/TRMachinist.Core/FanucModalCycles.cs",
+      "bytes": 5520,
+      "sha256": "b8f06240aaa392eb4d520bfe02cfbcbd5243d1f5afe6c4d84c719ca0f7f048d2"
+    },
+    {
+      "path": "src/TRMachinist.Core/FanucModalState.cs",
+      "bytes": 6109,
+      "sha256": "ac54831bc2d4a3b849e4fd01edee02c1d8b59168cd0ce5bcb74cda43125de9d8"
+    },
+    {
+      "path": "src/TRMachinist.Core/GCodeOperationCatalog.cs",
+      "bytes": 6281,
+      "sha256": "a6a5d1454a8ff81e446de3fb335a9c1fbb7b33cf816bdf33fbc55febc0ac2cf8"
+    },
+    {
+      "path": "src/TRMachinist.Core/GCodeOperationPathBuilder.cs",
+      "bytes": 8872,
+      "sha256": "0b221bc0aeb02a26fd6a0f2afc1d5d6c4d3100b2d100be1420ef7ad53b25b009"
+    },
+    {
+      "path": "src/TRMachinist.Core/GCodeParser.Fanuc.cs",
+      "bytes": 3888,
+      "sha256": "3376412a3d467e74dcfece02012cf8b32524eb3e26c12dd25eae197d7619470d"
+    },
+    {
+      "path": "src/TRMachinist.Core/GCodeParser.cs",
+      "bytes": 46534,
+      "sha256": "951906a9caf24a662625d98634f77e906c64c68b9bdb049b467812d858a10b29"
+    },
+    {
+      "path": "src/TRMachinist.Core/GCodePathTiming.cs",
+      "bytes": 1195,
+      "sha256": "55f1e6ee69c5954ad3b2a79222b98977936bc577bf30cf4219992acdafce0d76"
+    },
+    {
+      "path": "src/TRMachinist.Core/JobPackageReader.cs",
+      "bytes": 9537,
+      "sha256": "649d83550f9803ff001433a9431e7b30e3a791adea0158f9db26b87b4f937a2c"
+    },
+    {
+      "path": "src/TRMachinist.Core/JsonRead.cs",
+      "bytes": 2418,
+      "sha256": "6be7fc6367601ee49bf5152347f3a0a45a60ea45983645f360ac5893f9ede83d"
+    },
+    {
+      "path": "src/TRMachinist.Core/MachineCollisionPolicy.cs",
+      "bytes": 1327,
+      "sha256": "25d32731f7be443de407ba93fb43f08338b0201589abddf51019c0fdf9d84714"
+    },
+    {
+      "path": "src/TRMachinist.Core/MachineCoordinateResolver.cs",
+      "bytes": 9521,
+      "sha256": "92c8d7890dff589b1aaa3905317a1cb760350f0a8eace7c8371ba561608ad8df"
+    },
+    {
+      "path": "src/TRMachinist.Core/MachinePackageReader.cs",
+      "bytes": 10549,
+      "sha256": "62f1b064b3ed6fcb71a2be2a1d02c4ddc026b905c983d42c726116a3c7612d74"
+    },
+    {
+      "path": "src/TRMachinist.Core/MachineToolCoordinates.cs",
+      "bytes": 3821,
+      "sha256": "68e8b43d72adefc58414989849e2ac3e5fb93adbb43df57d2f81a3a2421923ff"
+    },
+    {
+      "path": "src/TRMachinist.Core/MeshCollisionGeometry.cs",
+      "bytes": 19810,
+      "sha256": "15298fd3c251658c32d6b86144ba478bdbbec7a445eed418dc24ab321de8e3bd"
+    },
+    {
+      "path": "src/TRMachinist.Core/Models.cs",
+      "bytes": 10754,
+      "sha256": "a13dba4387772052d7eba2b31935fcef5dae8925b28e8ecfa22773453ad61f71"
+    },
+    {
+      "path": "src/TRMachinist.Core/OrientedBounds3.cs",
+      "bytes": 3887,
+      "sha256": "34a8ddbfecbe7ecf80948d884492190092eaa4849a444f2fc4f6fb6d24770b77"
+    },
+    {
+      "path": "src/TRMachinist.Core/PackageArchive.cs",
+      "bytes": 2838,
+      "sha256": "d9c9342551f164268d5afa6cb397e97ff01e89e529bb88efea29388530800126"
+    },
+    {
+      "path": "src/TRMachinist.Core/ParametricToolMeshBuilder.cs",
+      "bytes": 11176,
+      "sha256": "d9263e959cbe8bc4f96b6c859849add0a23c67c313b2717619755108815f9922"
+    },
+    {
+      "path": "src/TRMachinist.Core/SimulationCursor.cs",
+      "bytes": 1124,
+      "sha256": "54a8223d20147cf9539490ef72367b666d71dcb1cd20ebc6f6cd6fd5b8d49180"
+    },
+    {
+      "path": "src/TRMachinist.Core/SimulationPlayer.cs",
+      "bytes": 9933,
+      "sha256": "9660331391c17ac6650343e038a935c9547b136b4d53c7cb60525264c4ce8f83"
+    },
+    {
+      "path": "src/TRMachinist.Core/SinumerikModalCycles.cs",
+      "bytes": 11328,
+      "sha256": "d4f7bd8dc44f951eda94ce7cdcf110e4f82d958c40f17ca272fb7588ea62f088"
+    },
+    {
+      "path": "src/TRMachinist.Core/StlMeshReader.cs",
+      "bytes": 4420,
+      "sha256": "9d9ad0d568eb3bad535935a9be5a035642a83612f6f080743beb5cd90b1b97e7"
+    },
+    {
+      "path": "src/TRMachinist.Core/StockMotionCache.cs",
+      "bytes": 1508,
+      "sha256": "11cb33bd4d1616d601e72206be4ca9189714ed177ad94942518df3f3b4ffa255"
+    },
+    {
+      "path": "src/TRMachinist.Core/TRMachinist.Core.csproj",
+      "bytes": 491,
+      "sha256": "9747d199e47d48eec51bd1526187f9eed9fa10b7b14c37f053d6a32810c30ff4"
+    },
+    {
+      "path": "src/TRMachinist.Core/ToolCollisionGeometry.cs",
+      "bytes": 7214,
+      "sha256": "b154b15c894801da01ce570190315e0082a1a7a956053116d0dbdf62656dc62f"
+    },
+    {
+      "path": "src/TRMachinist.Core/ToolCuttingProfile.cs",
+      "bytes": 7695,
+      "sha256": "2892f2f912b1710d1d3475fe2e1811576e355d77421f7a7a947f75c216db0111"
+    },
+    {
+      "path": "src/TRMachinist.Core/ToolHolderLibrary.cs",
+      "bytes": 5587,
+      "sha256": "69f4e36c53eaa111e08813419132fd7314fb475d8c2d2819def23195fcc758d1"
+    },
+    {
+      "path": "src/TRMachinist.Core/ToolStockCollisionPolicy.cs",
+      "bytes": 1407,
+      "sha256": "2ef50dd1739f59c78950d80b44d33d10e6083eb5e36d6d3994f3c93bf3e9a9c6"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelCycleProgress.cs",
+      "bytes": 3498,
+      "sha256": "49d333f287fa294d1123de9196c97a5ed474625cfdc398d10afa015f13d8ce2d"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelFrustum.cs",
+      "bytes": 5291,
+      "sha256": "759fe962d9e7ddd656c456b555da8cb21b72e537ff1fbfda25a0cde6d6bbc7e3"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelFrustumSweep.cs",
+      "bytes": 7218,
+      "sha256": "a735bfbd5d8864c86b31392dfccfe185bb51d341a08b70dfe8f8e925a4341572"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelInitialization.cs",
+      "bytes": 9287,
+      "sha256": "456457a1e5c27e81a11e3992131eef5f6c77fe419ebee1b8370cec8cc6b5a437"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelProfileBounds.cs",
+      "bytes": 3179,
+      "sha256": "4152806fd1f4a8b15836d337f7d757ae894dae314bee6e25b2cd8aefc9b27832"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelProfileRows.cs",
+      "bytes": 3431,
+      "sha256": "ced4a18b4fca348d361321974769e65c39d4bf7fe9d3bf5702100ec081e6dcbd"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelStock.cs",
+      "bytes": 122090,
+      "sha256": "09555dbb06c1403ebaf1e9c6d25a84fdb5bfa0ebd02ceb131c4744da96ae3068"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelSurfaceMesher.cs",
+      "bytes": 44565,
+      "sha256": "7c7faa49de7643a51cc9231fb8e2300f2c0a53b7ac3b82be292bc66bce66ed00"
+    },
+    {
+      "path": "src/TRMachinist.Core/TripleDexelTargetComparison.cs",
+      "bytes": 3757,
+      "sha256": "589e594131852cb48cbc7c234159517a75897db0032a4ea735e1a724c4cc4552"
+    },
+    {
+      "path": "src/TRMachinist.Core/ZDexelTarget.cs",
+      "bytes": 9880,
+      "sha256": "5db0c86350324d190699c236913a3c9e9493833a23fb584c62b8f02bd22b601d"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/Alpha4IpwBackgroundPipeline.cs",
+      "bytes": 18927,
+      "sha256": "81abebed8ee60ca5389c42ed7ab5c643d32a5ca22fd7b07dfba6ede4ec030024"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/App.xaml",
+      "bytes": 561,
+      "sha256": "a399c5bcffaeb39eaf206afb92b69245c08413eed0cae815bd48608333a7a63d"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/App.xaml.cs",
+      "bytes": 586,
+      "sha256": "84e9040bccd0a5220455408d6a316faf5c60d9ac8f4c8e6fd853acfe05b4d668"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/AssemblyInfo.cs",
+      "bytes": 633,
+      "sha256": "d41e48d2bce7f9eda84eef27c4008920a5639dd3f56baeff39273d58381575fe"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/GpuSceneMirror.Ipw.cs",
+      "bytes": 10419,
+      "sha256": "3e79300399d8d8c05cf38eace0f4b250d34df6f097b34e5e1226826849c53d30"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/GpuSceneMirror.Path.cs",
+      "bytes": 5110,
+      "sha256": "023bbe9ac303ef20acaffc171429704ac7602775e5f451b98605bea8b210a454"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/GpuSceneMirror.cs",
+      "bytes": 28591,
+      "sha256": "52caf8650b0366102e0abfe050a6c7ebc698d14b20c8b5b617a99e6d8072b96f"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/MachineSceneController.cs",
+      "bytes": 106018,
+      "sha256": "d3e1437ac681ddb2fe03fb917fd2807e83f4740fd14e6c297911fe50d362c653"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/MainWindow.PathAndDiagnostics.cs",
+      "bytes": 5737,
+      "sha256": "290be44c4f69aa3ce819e4c006e9b316bdbd4774c1813d054aac1e144a5cfd65"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/MainWindow.Workspace.cs",
+      "bytes": 3902,
+      "sha256": "55f428523b1e9db504a9f1989c6a66a21e3499b1b2569fac3c2978526dc94ecb"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/MainWindow.xaml",
+      "bytes": 35749,
+      "sha256": "71c8c81c298887203211e523e984af99be0fb9b878a09c70a0d315333aa9ff33"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/MainWindow.xaml.cs",
+      "bytes": 93617,
+      "sha256": "b699feb3e86efac874ec4813a347083cafd784d5315a8fd986d4ef993e384ddc"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/TRMachinist.Simulator.csproj",
+      "bytes": 1096,
+      "sha256": "b579c7c6062f73a129b8b867cdb09881df001c47eafbe46a16f344ebd3e09289"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/Themes/Workshop.xaml",
+      "bytes": 16157,
+      "sha256": "e5dd5fa01b429b748155877addc1caf5ae5ee16c3b38e4736e139b0957fccab3"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/ToolHolderLibraryWindow.xaml",
+      "bytes": 4270,
+      "sha256": "597fcd5ac5637b8cad4e78ca39abc6c66c401130a183685b26ae341a0ee6a2c6"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/ToolHolderLibraryWindow.xaml.cs",
+      "bytes": 3935,
+      "sha256": "e831c3fb94d40a1e41a574ae04c48232fc8c59f22750836b961a7e3ac05463e1"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/WorkpieceOffsetWindow.xaml",
+      "bytes": 3707,
+      "sha256": "1a955d9357221a3ff979a7a6da0cefb284fa962e632b45078f13aebf537918b5"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/WorkpieceOffsetWindow.xaml.cs",
+      "bytes": 1989,
+      "sha256": "8eb721cf3cb71ea2417a37c4db474f0ccdc366cf69efa43c329325d6e07b2f6e"
+    },
+    {
+      "path": "src/TRMachinist.Simulator/WpfMeshFactory.cs",
+      "bytes": 16189,
+      "sha256": "385d86ec4de61ffec1988d131b569106cf366b2fd01230c0b3494b16627652eb"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/CycleStockTests.cs",
+      "bytes": 2612,
+      "sha256": "be11f73482d856c4417d5f70a65954e74d583a4c89cfd330cdd87f593edf78a5"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/FanucControllerTests.cs",
+      "bytes": 13204,
+      "sha256": "74b1e4352dfd6e236f2c1afc0d8ccbdbef0b400b314c5bd57fd48424795ed3d0"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/IntervalSearchTests.cs",
+      "bytes": 3080,
+      "sha256": "7511275d4d7dbe880e41b0fed82102dc234c1192212d2e4e282ae9487a5c59d6"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/MeshCollisionTests.cs",
+      "bytes": 9125,
+      "sha256": "f16fbe37dd7726871ea3356cca4b9b9193a83858287f8a75fae401ab6ec27b37"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/ProfileQualityTests.cs",
+      "bytes": 10208,
+      "sha256": "bee8f9d84db8d8822fcd93c193ddf739c19ae60e1cc2ebfb1eccc685d7deae87"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/Program.cs",
+      "bytes": 158908,
+      "sha256": "4e18803ef8d119c69ca71c6f902a94d2a96328642caba297dfa1d17a2ccf0d15"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/SurfaceMaskTests.cs",
+      "bytes": 3591,
+      "sha256": "3430e5cd543ec847b817846e64184979bf241a9aa113980290875d70b8c87342"
+    },
+    {
+      "path": "src/TRMachinist.SmokeTests/TRMachinist.SmokeTests.csproj",
+      "bytes": 348,
+      "sha256": "915b1ceb6f0f438218d264cefdd9487d1d5975d7513007026ea4e3f85de8ec8c"
+    }
+  ]
+}
